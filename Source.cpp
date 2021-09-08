@@ -1,6 +1,7 @@
 #include <iostream>
 #include <windows.h>
 #include <stdlib.h>
+#include <conio.h>
 using namespace std;
 
 bool gameOver;
@@ -55,11 +56,56 @@ void visual() {
 }
 
 void logic() {
+	switch (dir) {
+	case LEFT:
+		x--;
+		break;
 
+	case RIGHT:
+		x++;
+		break;
+
+	case UP:
+		y++;
+		break;
+
+	case DOWN:
+		y--;
+		break;
+
+	default:
+		break;
+	}
 
 }
 
 void input() {
+	if (_kbhit()) {
+		switch (_getch()) {
+		
+		case 'a':
+			dir = LEFT;
+			break;
+		
+		case 'd':
+			dir = RIGHT;
+			break;
+
+		case 'w':
+			dir = UP;
+			break;
+
+		case 's':
+			dir = DOWN;
+			break;
+
+		case 'x':
+			gameOver = true;
+			break;
+		}
+	
+	
+	}
 
 
 }
