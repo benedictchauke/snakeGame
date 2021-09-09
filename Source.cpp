@@ -4,6 +4,9 @@
 #include <conio.h>
 using namespace std;
 
+int tailx[75], taily[75];
+int ntail;
+
 bool gameOver;
 const int height = 20;
 const int width = 20;
@@ -35,12 +38,20 @@ void visual() {
 				cout << "#";
 			if (i == y && j == x)
 				cout << "0";
-			else if (i == dotx && j == doty)
+			else if (i == doty && j == dotx)
 				cout << "*";
-			else 
-
+			else {
+				bool printtail = false;
+				
+				for (int k = 0; k < ntail; k++) {
+					if (tailx[k] == j && taily[k] == i) {
+						cout << "0";
+						printtail = true;
+					}
+				}
+				if(!printtail)
 				cout << " ";
-
+			}
 				if (j == width - 1) 
 					cout << "#";
 				
@@ -53,9 +64,30 @@ void visual() {
 		cout << "#";
 	}
 	cout << endl;
+	cout << "score:" << score;
 }
 
 void logic() {
+	int prevx = tailx[0];
+	int prevy = taily[0];
+
+	int prevx2, prevy2;
+
+	tailx[0] = x;
+	taily[0] = y;
+
+	for (int i = 1; i <= ntail; i++) {
+		prevx2 = tailx[i];
+		prevy2 = taily[i];
+
+		tailx[i] = prevx;
+		taily[i] = prevy;
+
+		prevx = prevx2;
+		prevy = prevy2;
+
+	}
+
 	switch (dir) {
 	case LEFT:
 		x--;
@@ -66,17 +98,37 @@ void logic() {
 		break;
 
 	case UP:
-		y++;
+		y--;
 		break;
 
 	case DOWN:
-		y--;
+		y++;
 		break;
 
 	default:
 		break;
 	}
 
+	if (x >= width)
+		x = 0;
+	else if (x < 0)
+		x = width - 1;
+
+	if (y >= width)
+		y = 0;
+	else if (y < 0)
+		y = width - 1;
+
+	for (int i = 0; i < ntail; i++)
+		if (tailx[i] == x && taily[i] == y)
+			gameOver = true;
+
+	if (x == dotx && y == doty) {
+		score++;
+		dotx = rand() % width;
+		doty = rand() % height;
+		ntail++;
+	}
 }
 
 void input() {
@@ -103,7 +155,7 @@ void input() {
 			gameOver = true;
 			break;
 		}
-	
+
 	
 	}
 
@@ -118,7 +170,7 @@ int main() {
 		visual();
 		input();
 		logic();
-		Sleep(10);
+		Sleep(60);
 	}
 
 
